@@ -1,0 +1,77 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalReason}} Contact</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm">
+      <div class="mb-3">
+        <label for="firstName"><span class="text-danger">*</span> First Name</label>
+        <div class="input-group">
+          <input id="firstName" name="firstName" class="form-control" required [(ngModel)]="selectedContact.firstName">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="lastName"><span class="text-danger">*</span> Last Name</label>
+        <div class="input-group">
+          <input id="lastName" name="lastName" class="form-control" required [(ngModel)]="selectedContact.lastName">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="phone"> <span class="text-danger">*</span> Phone</label>
+        <div class="input-group">
+          <input id="phone" name="phone" class="form-control" required [(ngModel)]="selectedContact.phone">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="closeModal()">Cancel</button>
+    <button type="button" class="btn btn-outline-success" *ngIf="modalReason=='Update'" (click)="updateContact()"
+      [disabled]="!f.valid">Update</button>
+    <button type="button" class="btn btn-outline-success" *ngIf="modalReason=='Add'" (click)="addContact()"
+      [disabled]="!f.valid">Save</button>
+  </div>
+</ng-template>
+
+<div class="row text-center box">
+  <h1 class="mx-4 my-4 text-info"><u>Welcome to Encora</u></h1>
+  <div class="row my-4" style="justify-content: center;">
+    <h4 class="col-2 text-secondary">Contact List</h4>
+    <div class="col-1 pr-0"></div>
+    <button class="col-2 mx-4 pl-0 btn btn-success" (click)="openModal(content, 'Add')">+ Add Contact</button>
+  </div>
+  <div class="col-6">
+    <div class="row contact py-2 my-2 mx-4">
+      <div class="col-2 thead text-center">User Id</div>
+      <div class="col-2 thead">First Name</div>
+      <div class="col-2 thead">Last Name</div>
+      <div class="col-3 thead">Phone</div>
+      <div class="col-2 thead text-center">Action</div>
+    </div>
+    <div class="col-12" *ngIf="!errorFetchingData">
+      <div class="row contact py-2 my-2 mx-4"
+        *ngFor="let contact of contacts | slice: (page-1) * pageSize : page * pageSize">
+        <div class="col-2 id text-center">{{contact.id}}</div>
+        <div class="col-2 f-name">{{contact.firstName}}</div>
+        <div class="col-2 l-name">{{contact.lastName}}</div>
+        <div class="col-3 phone">{{contact.phone}}</div>
+        <div class="col-2 action">
+          <span class="btn-link text-primary" (click)="openModal(content, 'Update', contact);">Update</span>
+          <span class="btn-link text-danger mx-2" (click)="deleteContact(contact)">Delete</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12" *ngIf="errorFetchingData">
+      <div class="row contact py-2 px-4 my-2 mx-4">
+        No records found.
+      </div>
+    </div>
+
+    <ngb-pagination class="d-flex justify-content-center" [collectionSize]="contacts.length" [pageSize]="pageSize"
+      [(page)]="page" aria-label="Default pagination"></ngb-pagination>
+
+  </div>
+
+</div>
