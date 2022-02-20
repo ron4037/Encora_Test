@@ -48,9 +48,9 @@ export class AppComponent {
       this.contacts.length > 0
         ? this.contacts[this.contacts.length - 1].id + 1
         : 1;
-    console.log(this.contacts, this.selectedContact);
+    // console.log(this.contacts, this.selectedContact);
     this.contacts.push({...this.selectedContact});
-    console.log(this.contacts);
+    // console.log(this.contacts);
     this.modalRef.dismiss();
     this.emptySelectedContact();
   }
